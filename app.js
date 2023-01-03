@@ -1,12 +1,10 @@
-const dotenv = require("dotenv");
-
-dotenv.config();
+const dotenv = require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const routes = require("./routes");
 const myDataSource = require("./models/myDataSource");
-app = express();
+const app = express();
 
 const PORT = process.env.PORT;
 
@@ -18,8 +16,6 @@ app.use(routes);
 app.get("/ping", (req, res) => {
   res.json({ message: "pong" });
 });
-
-//이니셜라이즈 넣기
 
 const start = async () => {
   myDataSource

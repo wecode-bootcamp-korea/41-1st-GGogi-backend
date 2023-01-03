@@ -3,15 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const signUp = async (email, name, password, address, phone, birthdate) => {
-  // const pwValidation = new RegExp("/^[da-zA-Z!@#]{8,}$/");
   const saltRounds = 10;
   const hashPassword = await bcrypt.hash(password, saltRounds);
-  // if (!pwValidation.test(password)) {
-  //   console.log(password);
-  //   const err = new Error("PASSWORD_IS_NOT_VALID");
-  //   err.statusCode = 409;
-  //   throw err;
-  // }
   const createUser = await userDao.createUser(
     email,
     name,

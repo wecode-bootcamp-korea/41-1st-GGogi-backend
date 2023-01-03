@@ -7,7 +7,7 @@ CREATE TABLE users (
   address varchar(1000) not null,
   phone varchar(100) not null,
   point decimal(10,2) null default 1000000,
-  birthdate int not null,
+  birthdate date not null,
   create_at timestamp default current_timestamp,
   update_at timestamp default current_timestamp on update current_timestamp
 );

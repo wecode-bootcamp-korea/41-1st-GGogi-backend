@@ -1,29 +1,34 @@
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 
-dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-// const routes = require("./routes");
-dotenv.config();
+const routes = require("./routes");
+const myDataSource = require("./models/myDataSource");
 
-app = express();
+const app = express();
 
 const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());
-// app.use(routes);
+app.use(routes);
 
 app.get("/ping", (req, res) => {
   res.json({ message: "pong" });
 });
 
-//이니셜라이즈 넣기
-
 const start = async () => {
-  //await dataSource.initialize();
+  myDataSource
+    .initialize()
+    .then(() => {
+      console.log("initialized Successfully");
+    })
+    .catch((err) => {
+      console.log("Error occurred during Data Source initalizaion!", err);
+      myDataSource.destroy();
+    });
   try {
     app.listen(PORT, () => console.log(`서버시작합니다.`));
   } catch (err) {

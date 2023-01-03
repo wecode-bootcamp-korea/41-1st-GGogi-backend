@@ -228,5 +228,6 @@ tags
 .history
 .ionide
 .gitignore
+db/schema.sql
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,node,vim,linux,visualstudiocode,dotenv

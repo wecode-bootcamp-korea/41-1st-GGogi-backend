@@ -1,7 +1,6 @@
 const { DataSource } = require("typeorm");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 
-dotenv.config();
 const myDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
   host: process.env.TYPEORM_HOST,

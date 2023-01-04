@@ -1,9 +1,15 @@
 require("dotenv").config();
+
+
+
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const routes = require("./routes");
 const appDataSource = require("./models/appDataSource");
+
+
+
 const app = express();
 
 const PORT = process.env.PORT;
@@ -21,7 +27,7 @@ const start = async () => {
   appDataSource
     .initialize()
     .then(() => {
-      console.log("Data Source has been init");
+      console.log("initialized Successfully");
     })
     .catch((err) => {
       console.log("Error occurred during Data Source initalizaion!", err);

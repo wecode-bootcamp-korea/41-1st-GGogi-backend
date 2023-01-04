@@ -1,8 +1,7 @@
 -- migrate:up
 CREATE TABLE order_status (
     id INT NOT NULL AUTO_INCREMENT,
-    order_type VARCHAR(255) NOT NULL,
-    payment_type VARCHAR(255) NOT NULL,
+    order_status VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 );
 

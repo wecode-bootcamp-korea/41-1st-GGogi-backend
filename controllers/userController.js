@@ -31,4 +31,24 @@ const signIn = async (req, res) => {
     return res.status(err.statusCode || 500).json({ message: err.message });
   }
 };
-module.exports = { signUp, signIn };
+
+const emailCheck = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "KEY_ERROR" });
+    }
+
+    const mailCheck = await userService.mailCheck(email);
+    if (mailCheck === false) {
+      return res.status(200).json({ message: "사용가능한 이메일입니다." });
+    }
+    return res.status(409).json({ message: "사용 불가능한 이메일입니다." });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+module.exports = { signUp, signIn, emailCheck };

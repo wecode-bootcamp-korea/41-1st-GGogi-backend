@@ -34,7 +34,16 @@ const signIn = async (email, password) => {
   return token;
 };
 
+const mailCheck = async (email) => {
+  const emailCount = await userDao.checkMail(email);
+  if (emailCount == undefined) {
+    return false;
+  } else {
+    return true;
+  }
+};
 module.exports = {
   signUp,
   signIn,
+  mailCheck,
 };

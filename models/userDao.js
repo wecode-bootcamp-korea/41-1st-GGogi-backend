@@ -2,7 +2,7 @@ const appDataSource = require("./appDataSource");
 
 const createUser = async (email, name, password, address, phone, birthdate) => {
   try {
-    return await myDataSource.query(
+    return await appDataSource.query(
       `INSERT INTO users(
         name,
         password,
@@ -23,7 +23,7 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
 
 const signIn = async (email, password) => {
   try {
-    const [pwd] = await myDataSource.query(
+    const [pwd] = await appDataSource.query(
       `SELECT * FROM users WHERE email = ?;`,
 
       [email]
@@ -36,7 +36,17 @@ const signIn = async (email, password) => {
   }
 };
 
+const checkMail = async (email) => {
+  const [emailC] = await appDataSource.query(
+    `SELECT * FROM users WHERE email = ?;`,
+
+    [email]
+  );
+  return emailC;
+};
+
 module.exports = {
   createUser,
   signIn,
+  checkMail,
 };

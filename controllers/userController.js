@@ -5,7 +5,9 @@ const signUp = async (req, res) => {
     const { email, name, password, address, phone, birthdate } = req.body;
 
     if (!name || !password || !address || !phone || !email || !birthdate) {
-      return res.status(400).json({ message: "KEY_ERROR" });
+      const err = new Error("KEY_ERROR");
+      err.statusCode = 400;
+      throw err;
     }
 
     await userService.signUp(email, name, password, address, phone, birthdate);
@@ -20,7 +22,9 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "KEY_ERROR" });
+      const err = new Error("KEY_ERROR");
+      err.statusCode = 400;
+      throw err;
     }
 
     const token = await userService.signIn(email, password);
@@ -37,7 +41,9 @@ const emailCheck = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ message: "KEY_ERROR" });
+      const err = new Error("KEY_ERROR");
+      err.statusCode = 400;
+      throw err;
     }
 
     const mailCheck = await userService.mailCheck(email);

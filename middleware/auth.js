@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const validateToken = async (req, res, next) => {
   try {
@@ -10,7 +9,6 @@ const validateToken = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     res.status(401).json({ error: "Invalid Access Token" });
-    next(err);
   }
 };
 

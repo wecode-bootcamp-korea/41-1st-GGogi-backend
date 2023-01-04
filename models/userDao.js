@@ -21,14 +21,14 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
   }
 };
 
-const signIn = async (email, password) => {
+const getUserByEmail = async (email, password) => {
   try {
-    const [pwd] = await appDataSource.query(
+    const [user] = await appDataSource.query(
       `SELECT * FROM users WHERE email = ?;`,
 
       [email]
     );
-    return pwd;
+    return user;
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
@@ -47,6 +47,6 @@ const checkMail = async (email) => {
 
 module.exports = {
   createUser,
-  signIn,
+  getUserByEmail,
   checkMail,
 };

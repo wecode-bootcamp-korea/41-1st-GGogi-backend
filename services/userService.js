@@ -18,20 +18,19 @@ const signUp = async (email, name, password, address, phone, birthdate) => {
 };
 
 const signIn = async (email, password) => {
-  const pwd = await userDao.signIn(email, password);
-  const isMatch = await bcrypt.compare(password, pwd.password);
-  if (!pwd) {
+  const user = await userDao.getUserByEmail(email);
+  if (!user) {
     const err = new Error("USER_IS_NOT_VALID");
     err.statusCode = 409;
     throw err;
   }
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     const err = new Error("USER_IS_NOT_MATCH");
     err.statusCode = 409;
     throw err;
   }
-  const token = jwt.sign({ id: pwd.id }, process.env.secretKey);
-  return token;
+  return jwt.sign({ id: user.id }, process.env.secretKey);
 };
 
 const mailCheck = async (email) => {

@@ -2,7 +2,7 @@ const appDataSource = require("./appDataSource");
 
 const createUser = async (email, name, password, address, phone, birthdate) => {
   try {
-    return await appDataSource.query(
+    return appDataSource.query(
       `INSERT INTO users(
         name,
         password,
@@ -14,22 +14,27 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
   `,
       [name, password, address, phone, email, birthdate]
     );
-  } catch (err) {
+  } catch {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
     throw error;
   }
 };
 
-const getUserByEmail = async (email, password) => {
+const getUserByEmail = async (email) => {
   try {
-    const [user] = await appDataSource.query(
-      `SELECT * FROM users WHERE email = ?;`,
+    const user = appDataSource.query(
+      `SELECT 
+      email,
+      password
+      FROM 
+      users 
+      WHERE email = ?;`,
 
       [email]
     );
     return user;
-  } catch (err) {
+  } catch {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
     throw error;
@@ -37,7 +42,7 @@ const getUserByEmail = async (email, password) => {
 };
 
 const checkMail = async (email) => {
-  const [emailC] = await appDataSource.query(
+  const [emailC] = appDataSource.query(
     `SELECT * FROM users WHERE email = ?;`,
 
     [email]

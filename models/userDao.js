@@ -1,5 +1,5 @@
 const appDataSource = require("./appDataSource");
-
+//회원가입
 const createUser = async (email, name, password, address, phone, birthdate) => {
   try {
     return appDataSource.query(
@@ -20,7 +20,7 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
     throw error;
   }
 };
-
+//로그인 이메일 검증
 const getUserByEmail = async (email) => {
   try {
     const [user] = await appDataSource.query(
@@ -40,7 +40,7 @@ const getUserByEmail = async (email) => {
     throw error;
   }
 };
-
+//이메일중복체크
 const checkMail = async (email) => {
   const [result] = await appDataSource.query(
     `SELECT EXISTS (SELECT id FROM users WHERE email = ?
@@ -49,7 +49,7 @@ const checkMail = async (email) => {
   );
   return !!parseInt(result.registerd);
 };
-
+//토큰관련
 const getUserId = async (email) => {
   const result = await appDataSource.query(
     `SELECT email FROM users WHERE email =?;`,
@@ -58,7 +58,7 @@ const getUserId = async (email) => {
   );
   return result;
 };
-
+//마이페이지의 메인페이지 정보
 const getUser = async (email) => {
   console.log(email);
   try {
@@ -86,7 +86,7 @@ const getUser = async (email) => {
     throw error;
   }
 };
-
+//주소호출
 const getMyAddress = async (email) => {
   try {
     const result = await appDataSource.query(
@@ -122,6 +122,48 @@ const patchMyAddress = async (address, email) => {
     throw error;
   }
 };
+//비밀번호 수정 페이지 정보표시
+const getMyInfo = async (email) => {
+  try {
+    const result = await appDataSource.query(
+      `SELECT
+      email,
+      name,
+      phone,
+      birthdate
+       FROM users 
+       WHERE email =?;`,
+      [email]
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+    const error = new Error("No result");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+//비밀번호 수정
+const patchMyPwd = async (password, email) => {
+  console.log(password, 3);
+  console.log(email, 4);
+  try {
+    const result = await appDataSource.query(
+      `UPDATE users
+      SET password =?
+      WHERE email =?;`,
+      [password, email]
+    );
+    console.log(result, 5);
+    return result;
+  } catch (err) {
+    console.log(err);
+    const error = new Error("No result");
+    error.statusCode = 500;
+    throw error;
+  }
+};
 module.exports = {
   createUser,
   getUserByEmail,
@@ -130,4 +172,6 @@ module.exports = {
   getUser,
   getMyAddress,
   patchMyAddress,
+  getMyInfo,
+  patchMyPwd,
 };

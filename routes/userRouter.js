@@ -10,5 +10,7 @@ router.post("/emailcheck", userController.emailCheck);
 router.get("/mypage", loginRequired, userController.myPageShow);
 router.get("/addressshow", loginRequired, userController.myAddress);
 router.patch("/address", loginRequired, userController.addressPatch);
+router.get("/info", loginRequired, userController.myInfo);
+router.patch("/pwd", loginRequired, userController.pwdPatch);
 
 module.exports = { router };

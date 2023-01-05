@@ -88,6 +88,26 @@ const addressPatch = async (req, res) => {
     return res.status(err.statusCode || 500).json({ message: err.message });
   }
 };
+const myInfo = async (req, res) => {
+  const email = req.user.email;
+  try {
+    await userService.myInfoShow(email);
+    return res.status(200).json({ message: "userInfoGet Success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+const pwdPatch = async (req, res) => {
+  try {
+    await userService.myPwd(req);
+    return res.status(200).json({ message: "addressPatch Success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
 module.exports = {
   signUp,
   signIn,
@@ -95,4 +115,6 @@ module.exports = {
   myPageShow,
   myAddress,
   addressPatch,
+  myInfo,
+  pwdPatch,
 };

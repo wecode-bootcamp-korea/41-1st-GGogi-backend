@@ -20,7 +20,6 @@ const signUp = async (email, name, password, address, phone, birthdate) => {
 //로그인
 const signIn = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
-  console.log(user);
 
   if (user == undefined) {
     const err = new Error("USER_IS_NOT_VALID");
@@ -66,6 +65,28 @@ const myAddressPatch = async (req) => {
   const result = await userDao.patchMyAddress(address, email);
   return result;
 };
+//마이페이지 정보수정 정보표현창
+const myInfoShow = async (email) => {
+  const result = await userDao.getMyInfo(email);
+  return result;
+};
+//비밀번호 수정
+const myPwd = async (req) => {
+  const email = req.user.email;
+  const user = await userDao.getUserByEmail(email);
+  const { oldPassword, newPassword } = req.body;
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    const err = new Error("PASSWORD_NOT_MATCH");
+    err.statusCode = 409;
+    throw err;
+  }
+  await pwValidation(newPassword);
+  const saltRounds = 10;
+  const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+  const result = await userDao.patchMyPwd(hashPassword, email);
+  return result;
+};
 module.exports = {
   signUp,
   signIn,
@@ -74,4 +95,6 @@ module.exports = {
   mypage,
   myAddressShow,
   myAddressPatch,
+  myInfoShow,
+  myPwd,
 };

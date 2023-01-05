@@ -57,4 +57,15 @@ const emailCheck = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn, emailCheck };
+const myPageShow = async (req, res) => {
+  const email = req.user.email;
+  try {
+    await userService.mypage(email);
+    return res.status(200).json({ message: "Success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+module.exports = { signUp, signIn, emailCheck, myPageShow };

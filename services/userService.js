@@ -27,13 +27,13 @@ const signIn = async (email, password) => {
     err.statusCode = 409;
     throw err;
   }
-  const isMatch = await bcrypt.compare(password, user[0].password);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     const err = new Error("USER_IS_NOT_MATCH");
     err.statusCode = 409;
     throw err;
   }
-  return jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
+  return jwt.sign({ id: user.email }, process.env.JWT_SECRET_KEY);
 };
 
 const mailCheck = async (email) => {
@@ -44,8 +44,21 @@ const mailCheck = async (email) => {
     return true;
   }
 };
+
+const getUserById = async (email) => {
+  const getUser = await userDao.getUserId(email);
+  return getUser;
+};
+
+const mypage = async (email) => {
+  const userPage = await userDao.getUser(email);
+  return userPage;
+};
+
 module.exports = {
   signUp,
   signIn,
   mailCheck,
+  getUserById,
+  mypage,
 };

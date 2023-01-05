@@ -78,7 +78,6 @@ const getUser = async (email) => {
        WHERE email =?;`,
       [email]
     );
-    console.log(result);
     return result;
   } catch (err) {
     console.log(err);
@@ -88,10 +87,47 @@ const getUser = async (email) => {
   }
 };
 
+const getMyAddress = async (email) => {
+  try {
+    const result = await appDataSource.query(
+      `SELECT
+      address
+       FROM users 
+       WHERE email =?;`,
+      [email]
+    );
+    return result;
+  } catch (err) {
+    console.log(err);
+    const error = new Error("No result");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
+//주소수정
+const patchMyAddress = async (address, email) => {
+  try {
+    const result = await appDataSource.query(
+      `UPDATE users
+      SET address =?
+      WHERE email =?;`,
+      [address, email]
+    );
+    return result;
+  } catch (err) {
+    console.log(err);
+    const error = new Error("No result");
+    error.statusCode = 500;
+    throw error;
+  }
+};
 module.exports = {
   createUser,
   getUserByEmail,
   checkMail,
   getUserId,
   getUser,
+  getMyAddress,
+  patchMyAddress,
 };

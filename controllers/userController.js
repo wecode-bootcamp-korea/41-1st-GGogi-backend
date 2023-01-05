@@ -68,4 +68,31 @@ const myPageShow = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn, emailCheck, myPageShow };
+const myAddress = async (req, res) => {
+  const email = req.user.email;
+  try {
+    await userService.myAddressShow(email);
+    return res.status(200).json({ message: "Success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+const addressPatch = async (req, res) => {
+  try {
+    await userService.myAddressPatch(req);
+    return res.status(200).json({ message: "addressPatch Success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+module.exports = {
+  signUp,
+  signIn,
+  emailCheck,
+  myPageShow,
+  myAddress,
+  addressPatch,
+};

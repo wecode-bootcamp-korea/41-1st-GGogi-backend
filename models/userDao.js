@@ -78,6 +78,7 @@ const getUser = async (email) => {
        WHERE email =?;`,
       [email]
     );
+    console.log(result);
     return result;
   } catch (err) {
     console.log(err);
@@ -146,8 +147,6 @@ const getMyInfo = async (email) => {
 };
 //비밀번호 수정
 const patchMyPwd = async (password, email) => {
-  console.log(password, 3);
-  console.log(email, 4);
   try {
     const result = await appDataSource.query(
       `UPDATE users
@@ -155,7 +154,6 @@ const patchMyPwd = async (password, email) => {
       WHERE email =?;`,
       [password, email]
     );
-    console.log(result, 5);
     return result;
   } catch (err) {
     console.log(err);

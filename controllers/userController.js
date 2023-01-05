@@ -60,8 +60,8 @@ const emailCheck = async (req, res) => {
 const myPageShow = async (req, res) => {
   const email = req.user.email;
   try {
-    await userService.mypage(email);
-    return res.status(200).json({ message: "Success" });
+    const result = await userService.mypage(email);
+    return res.status(200).json({ result });
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500).json({ message: err.message });
@@ -71,8 +71,8 @@ const myPageShow = async (req, res) => {
 const myAddress = async (req, res) => {
   const email = req.user.email;
   try {
-    await userService.myAddressShow(email);
-    return res.status(200).json({ message: "Success" });
+    const result = await userService.myAddressShow(email);
+    return res.status(200).json({ result });
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500).json({ message: err.message });
@@ -91,8 +91,8 @@ const addressPatch = async (req, res) => {
 const myInfo = async (req, res) => {
   const email = req.user.email;
   try {
-    await userService.myInfoShow(email);
-    return res.status(200).json({ message: "userInfoGet Success" });
+    const result = await userService.myInfoShow(email);
+    return res.status(200).json({ result });
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500).json({ message: err.message });

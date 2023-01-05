@@ -45,30 +45,25 @@ const mailCheck = async (email) => {
 };
 //토큰관련
 const getUserById = async (email) => {
-  const getUser = await userDao.getUserId(email);
-  return getUser;
+  return await userDao.getUserId(email);
 };
 //마이페이지 정보전송
 const mypage = async (email) => {
-  const userPage = await userDao.getUser(email);
-  return userPage;
+  return await userDao.getUser(email);
 };
 //마이페이지 주소정보 조회//
 const myAddressShow = async (email) => {
-  const result = await userDao.getMyAddress(email);
-  return result;
+  return await userDao.getMyAddress(email);
 };
 //마이페이지 주소수정
 const myAddressPatch = async (req) => {
   const email = req.user.email;
   const { address } = req.body;
-  const result = await userDao.patchMyAddress(address, email);
-  return result;
+  return await userDao.patchMyAddress(address, email);
 };
 //마이페이지 정보수정 정보표현창
 const myInfoShow = async (email) => {
-  const result = await userDao.getMyInfo(email);
-  return result;
+  return await userDao.getMyInfo(email);
 };
 //비밀번호 수정
 const myPwd = async (req) => {
@@ -84,8 +79,7 @@ const myPwd = async (req) => {
   await pwValidation(newPassword);
   const saltRounds = 10;
   const hashPassword = await bcrypt.hash(newPassword, saltRounds);
-  const result = await userDao.patchMyPwd(hashPassword, email);
-  return result;
+  return await userDao.patchMyPwd(hashPassword, email);
 };
 module.exports = {
   signUp,

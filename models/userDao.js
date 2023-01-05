@@ -60,7 +60,6 @@ const getUserId = async (email) => {
 };
 //마이페이지의 메인페이지 정보
 const getUser = async (email) => {
-  console.log(email);
   try {
     const result = await appDataSource.query(
       `SELECT
@@ -78,7 +77,6 @@ const getUser = async (email) => {
        WHERE email =?;`,
       [email]
     );
-    console.log(result);
     return result;
   } catch (err) {
     console.log(err);

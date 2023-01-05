@@ -42,12 +42,12 @@ const getUserByEmail = async (email) => {
 };
 
 const checkMail = async (email) => {
-  const [emailC] = appDataSource.query(
-    `SELECT * FROM users WHERE email = ?;`,
-
+  const [result] = await appDataSource.query(
+    `SELECT EXISTS (SELECT id FROM users WHERE email = ?
+      ) as registerd`,
     [email]
   );
-  return emailC;
+  return !!parseInt(result.registerd);
 };
 
 module.exports = {

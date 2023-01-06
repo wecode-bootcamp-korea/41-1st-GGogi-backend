@@ -1,24 +1,14 @@
 const productService = require("../services/productService");
+const { catchAsync } = require("../utils/error");
 
-//전체리스트 필요정보 요청
-const getProducts = async (req, res) => {
-  try {
-    const result = await productService.getProducts(req);
-    return res.status(200).json({ data: result });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
-  }
-};
+const getProducts = catchAsync(async (req, res) => {
+  const result = await productService.getProducts(req);
+  return res.status(200).json({ data: result });
+});
 
-const getProductInfo = async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const result = await productService.getProductInfo(productId);
-    return res.status(200).json({ data: result });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
-  }
-};
+const getProductInfo = catchAsync(async (req, res) => {
+  const result = await productService.getProductInfo(req.params.productId);
+  return res.status(200).json({ data: result });
+});
+
 module.exports = { getProducts, getProductInfo };

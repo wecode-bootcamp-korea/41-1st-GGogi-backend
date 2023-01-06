@@ -1,27 +1,18 @@
 const appDataSource = require("./appDataSource");
 
-const productAll = async (req) => {
-  try {
-    const result = await appDataSource.query(
-      `SELECT
+const getProducts = async (req) => {
+  return await appDataSource.query(
+    `SELECT
       name,
       price,
       thumbnail_image
       FROM products`
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+  );
 };
 
 const getProductInfo = async (productId) => {
-  try {
-    return await appDataSource.query(
-      `SELECT
+  return await appDataSource.query(
+    `SELECT
       name,
       price,
       thumbnail_image,
@@ -29,13 +20,7 @@ const getProductInfo = async (productId) => {
       FROM products
       join product_images on products.id = product_images.product_id
       where product_id = ?`,
-      [productId]
-    );
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+    [productId]
+  );
 };
-module.exports = { productAll, getProductInfo };
+module.exports = { getProducts, getProductInfo };

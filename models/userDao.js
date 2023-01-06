@@ -1,5 +1,5 @@
 const appDataSource = require("./appDataSource");
-//회원가입
+
 const createUser = async (email, name, password, address, phone, birthdate) => {
   try {
     return appDataSource.query(
@@ -20,11 +20,12 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
     throw error;
   }
 };
-//로그인 이메일 검증
+
 const getUserByEmail = async (email) => {
   try {
     const [user] = await appDataSource.query(
-      `SELECT 
+      `SELECT
+      id,
       email,
       password
       FROM 
@@ -40,7 +41,27 @@ const getUserByEmail = async (email) => {
     throw error;
   }
 };
-//이메일중복체크
+const getUserByPassword = async (userId) => {
+  try {
+    const [user] = await appDataSource.query(
+      `SELECT
+      id,
+      email,
+      password
+      FROM 
+      users 
+      WHERE users.id = ?;`,
+
+      [userId]
+    );
+    return user;
+  } catch {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
 const checkMail = async (email) => {
   const [result] = await appDataSource.query(
     `SELECT EXISTS (SELECT id FROM users WHERE email = ?
@@ -49,20 +70,18 @@ const checkMail = async (email) => {
   );
   return !!parseInt(result.registerd);
 };
-//토큰관련
-const getUserId = async (email) => {
-  const result = await appDataSource.query(
-    `SELECT email FROM users WHERE email =?;`,
 
-    [email]
+const getUserId = async (userId) => {
+  return await appDataSource.query(
+    `SELECT id FROM users WHERE id =?;`,
+
+    [userId]
   );
-  return result;
 };
-//마이페이지의 메인페이지 정보
-const getUser = async (email) => {
-  try {
-    const result = await appDataSource.query(
-      `SELECT
+
+const getUserInfo = async (userId) => {
+  return await appDataSource.query(
+    `SELECT
       users.name,
       point,
       order_status.status,
@@ -74,28 +93,20 @@ const getUser = async (email) => {
        join order_status on orders.order_status_id = order_status.id
        join order_products on orders.id = order_products.orders_id
        join products on products.id = order_products.product_id
-       WHERE email =?;`,
-      [email]
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+       WHERE users.id =?;`,
+    [userId]
+  );
 };
-//주소호출
-const getMyAddress = async (email) => {
+
+const getUserAddress = async (userId) => {
   try {
-    const result = await appDataSource.query(
+    return await appDataSource.query(
       `SELECT
       address
        FROM users 
-       WHERE email =?;`,
-      [email]
+       WHERE users.id =?;`,
+      [userId]
     );
-    return result;
   } catch (err) {
     console.log(err);
     const error = new Error("No result");
@@ -104,16 +115,14 @@ const getMyAddress = async (email) => {
   }
 };
 
-//주소수정
-const patchMyAddress = async (address, email) => {
+const updateUserAddress = async (address, userId) => {
   try {
-    const result = await appDataSource.query(
+    return await appDataSource.query(
       `UPDATE users
       SET address =?
-      WHERE email =?;`,
-      [address, email]
+      WHERE users.id =?;`,
+      [address, userId]
     );
-    return result;
   } catch (err) {
     console.log(err);
     const error = new Error("No result");
@@ -121,21 +130,19 @@ const patchMyAddress = async (address, email) => {
     throw error;
   }
 };
-//비밀번호 수정 페이지 정보표시
-const getMyInfo = async (email) => {
+
+const getUserProfile = async (userId) => {
   try {
-    const result = await appDataSource.query(
+    return await appDataSource.query(
       `SELECT
       email,
       name,
       phone,
       birthdate
        FROM users 
-       WHERE email =?;`,
-      [email]
+       WHERE users.id =?;`,
+      [userId]
     );
-    console.log(result);
-    return result;
   } catch (err) {
     console.log(err);
     const error = new Error("No result");
@@ -143,16 +150,15 @@ const getMyInfo = async (email) => {
     throw error;
   }
 };
-//비밀번호 수정
-const patchMyPwd = async (password, email) => {
+
+const updateUserPassword = async (password, userId) => {
   try {
-    const result = await appDataSource.query(
+    return await appDataSource.query(
       `UPDATE users
       SET password =?
-      WHERE email =?;`,
-      [password, email]
+      WHERE users.id =?;`,
+      [password, userId]
     );
-    return result;
   } catch (err) {
     console.log(err);
     const error = new Error("No result");
@@ -165,9 +171,10 @@ module.exports = {
   getUserByEmail,
   checkMail,
   getUserId,
-  getUser,
-  getMyAddress,
-  patchMyAddress,
-  getMyInfo,
-  patchMyPwd,
+  getUserInfo,
+  getUserAddress,
+  updateUserAddress,
+  getUserProfile,
+  updateUserPassword,
+  getUserByPassword,
 };

@@ -10,7 +10,7 @@ const loginRequired = async (req, res, next) => {
     return res.status(error.statusCode).json({ message: error.message });
   }
 
-  const decode = await jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+  const decode = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
   const [user] = await userService.getUserById(decode.id);
 
   if (!user) {

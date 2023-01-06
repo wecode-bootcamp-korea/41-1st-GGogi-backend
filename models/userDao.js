@@ -1,9 +1,8 @@
 const appDataSource = require("./appDataSource");
 
 const createUser = async (email, name, password, address, phone, birthdate) => {
-  try {
-    return appDataSource.query(
-      `INSERT INTO users(
+  return appDataSource.query(
+    `INSERT INTO users(
         name,
         password,
         address,
@@ -12,19 +11,13 @@ const createUser = async (email, name, password, address, phone, birthdate) => {
         birthdate
         ) VALUES (?, ?, ?, ?, ?, ?);
   `,
-      [name, password, address, phone, email, birthdate]
-    );
-  } catch {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [name, password, address, phone, email, birthdate]
+  );
 };
 
 const getUserByEmail = async (email) => {
-  try {
-    const [user] = await appDataSource.query(
-      `SELECT
+  const [user] = await appDataSource.query(
+    `SELECT
       id,
       email,
       password
@@ -32,19 +25,13 @@ const getUserByEmail = async (email) => {
       users 
       WHERE email = ?;`,
 
-      [email]
-    );
-    return user;
-  } catch {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [email]
+  );
+  return user;
 };
 const getUserByPassword = async (userId) => {
-  try {
-    const [user] = await appDataSource.query(
-      `SELECT
+  const [user] = await appDataSource.query(
+    `SELECT
       id,
       email,
       password
@@ -52,14 +39,9 @@ const getUserByPassword = async (userId) => {
       users 
       WHERE users.id = ?;`,
 
-      [userId]
-    );
-    return user;
-  } catch {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [userId]
+  );
+  return user;
 };
 
 const checkMail = async (email) => {
@@ -71,7 +53,7 @@ const checkMail = async (email) => {
   return !!parseInt(result.registerd);
 };
 
-const getUserId = async (userId) => {
+const getUserById = async (userId) => {
   return await appDataSource.query(
     `SELECT id FROM users WHERE id =?;`,
 
@@ -99,82 +81,54 @@ const getUserInfo = async (userId) => {
 };
 
 const getUserAddress = async (userId) => {
-  try {
-    return await appDataSource.query(
-      `SELECT
+  return await appDataSource.query(
+    `SELECT
       address
        FROM users 
        WHERE users.id =?;`,
-      [userId]
-    );
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+    [userId]
+  );
 };
 
-const updateUserAddress = async (address, userId) => {
-  try {
-    return await appDataSource.query(
-      `UPDATE users
+const addressUpdate = async (address, userId) => {
+  return await appDataSource.query(
+    `UPDATE users
       SET address =?
       WHERE users.id =?;`,
-      [address, userId]
-    );
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+    [address, userId]
+  );
 };
 
 const getUserProfile = async (userId) => {
-  try {
-    return await appDataSource.query(
-      `SELECT
+  return await appDataSource.query(
+    `SELECT
       email,
       name,
       phone,
       birthdate
        FROM users 
        WHERE users.id =?;`,
-      [userId]
-    );
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+    [userId]
+  );
 };
 
-const updateUserPassword = async (password, userId) => {
-  try {
-    return await appDataSource.query(
-      `UPDATE users
+const passwordUpdate = async (password, userId) => {
+  return await appDataSource.query(
+    `UPDATE users
       SET password =?
       WHERE users.id =?;`,
-      [password, userId]
-    );
-  } catch (err) {
-    console.log(err);
-    const error = new Error("No result");
-    error.statusCode = 500;
-    throw error;
-  }
+    [password, userId]
+  );
 };
 module.exports = {
   createUser,
   getUserByEmail,
   checkMail,
-  getUserId,
+  getUserById,
   getUserInfo,
   getUserAddress,
-  updateUserAddress,
+  addressUpdate,
   getUserProfile,
-  updateUserPassword,
+  passwordUpdate,
   getUserByPassword,
 };

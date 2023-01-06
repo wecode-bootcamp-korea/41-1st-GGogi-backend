@@ -40,27 +40,27 @@ const mailCheck = async (email) => {
 };
 
 const getUserById = async (userId) => {
-  return userDao.getUserId(userId);
+  return userDao.getUserById(userId);
 };
 
-const userInfoGet = async (userId) => {
+const getUserInfo = async (userId) => {
   return userDao.getUserInfo(userId);
 };
 
-const getAddress = async (userId) => {
+const getUserAddress = async (userId) => {
   return userDao.getUserAddress(userId);
 };
 
-const userAddressUpdate = async (userId, address) => {
-  return userDao.updateUserAddress(address, userId);
+const addressUpdate = async (userId, address) => {
+  return userDao.addressUpdate(address, userId);
 };
 
-const userProfileGet = async (userId) => {
+const getUserProfile = async (userId) => {
   return userDao.getUserProfile(userId);
 };
 
-const userPasswordUpdate = async (oldPassword, newPassword, userId) => {
-  const user = await userDao.getUserByPassword(userId);
+const passwordUpdate = async (oldPassword, newPassword, userId) => {
+  const user = await userDao.passwordUpdate(userId);
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) {
     const err = new Error("PASSWORD_NOT_MATCH");
@@ -70,7 +70,7 @@ const userPasswordUpdate = async (oldPassword, newPassword, userId) => {
   await pwValidation(newPassword);
   const saltRounds = 10;
   const hashPassword = await bcrypt.hash(newPassword, saltRounds);
-  return await userDao.updateUserPassword(hashPassword, userId);
+  return await userDao.passwordUpdate(hashPassword, userId);
 };
 
 module.exports = {
@@ -78,9 +78,9 @@ module.exports = {
   signIn,
   mailCheck,
   getUserById,
-  userInfoGet,
-  getAddress,
-  userAddressUpdate,
-  userProfileGet,
-  userPasswordUpdate,
+  getUserInfo,
+  getUserAddress,
+  addressUpdate,
+  getUserProfile,
+  passwordUpdate,
 };

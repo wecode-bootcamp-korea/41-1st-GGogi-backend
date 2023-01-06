@@ -38,41 +38,43 @@ const emailCheck = catchAsync(async (req, res) => {
   }
 
   const mailCheck = await userService.mailCheck(email);
-  if (mailCheck === false) {
-    return res.status(200).json({ message: "사용가능한 이메일입니다." });
-  }
-  return res.status(409).json({ message: "사용 불가능한 이메일입니다." });
+  let message = "";
+  mailCheck
+    ? (message = "사용 불가능한 이메일입니다.")
+    : (message = "사용 가능한 메일입니다.");
+
+  return res.status(409).json({ message });
 });
 
 const getUserInfo = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const result = await userService.userInfoGet(userId);
+  const result = await userService.getUserInfo(userId);
   return res.status(200).json({ data: result });
 });
 
 const getUserAddress = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const result = await userService.getAddress(userId);
+  const result = await userService.getUserAddress(userId);
   return res.status(200).json({ data: result });
 });
 
 const addressUpdate = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { address } = req.body;
-  await userService.userAddressUpdate(userId, address);
+  await userService.addressUpdate(userId, address);
   return res.status(201).json({ message: "UPDATE_USER_ADDRESS_SUCCESS" });
 });
 
-const getProfile = catchAsync(async (req, res) => {
+const getUserProfile = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const result = await userService.userProfileGet(userId);
+  const result = await userService.getUserProfile(userId);
   return res.status(200).json({ data: result });
 });
 
 const passwordUpdate = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { oldPassword, newPassword } = req.body;
-  await userService.userPasswordUpdate(oldPassword, newPassword, userId);
+  await userService.passwordUpdate(oldPassword, newPassword, userId);
   return res.status(201).json({ message: "UPDATE_USER_PASSWORD_SUCCESS" });
 });
 
@@ -83,6 +85,6 @@ module.exports = {
   getUserInfo,
   getUserAddress,
   addressUpdate,
-  getProfile,
+  getUserProfile,
   passwordUpdate,
 };

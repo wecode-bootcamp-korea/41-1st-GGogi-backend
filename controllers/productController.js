@@ -3,7 +3,7 @@ const productService = require("../services/productService");
 //전체리스트 필요정보 요청
 const getProducts = async (req, res) => {
   try {
-    const result = await productService.productShow(req);
+    const result = await productService.getProducts(req);
     return res.status(200).json({ data: result });
   } catch (err) {
     console.log(err);
@@ -13,7 +13,8 @@ const getProducts = async (req, res) => {
 
 const getProductInfo = async (req, res) => {
   try {
-    const result = await productService.productInfoShow(req);
+    const productId = req.params.productId;
+    const result = await productService.getProductInfo(productId);
     return res.status(200).json({ data: result });
   } catch (err) {
     console.log(err);

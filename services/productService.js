@@ -4,7 +4,7 @@ const productShow = async (req) => {
   return await productDao.productAll(req);
 };
 
-const productInfoShow = async (req) => {
-  return await productDao.productInfo(req);
+const getProductInfo = async (productId) => {
+  return await productDao.getProductInfo(productId);
 };
-module.exports = { productShow, productInfoShow };
+module.exports = { productShow, getProductInfo };

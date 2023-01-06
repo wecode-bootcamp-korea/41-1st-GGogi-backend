@@ -18,18 +18,19 @@ const productAll = async (req) => {
   }
 };
 
-const productInfo = async (req) => {
+const getProductInfo = async (productId) => {
   try {
-    const result = await appDataSource.query(
+    return await appDataSource.query(
       `SELECT
       name,
       price,
       thumbnail_image,
       product_images.image_url
       FROM products
-      join product_images on products.id = product_images.product_id`
+      join product_images on products.id = product_images.product_id
+      where product_id = ?`,
+      [productId]
     );
-    return result;
   } catch (err) {
     console.log(err);
     const error = new Error("No result");
@@ -37,4 +38,4 @@ const productInfo = async (req) => {
     throw error;
   }
 };
-module.exports = { productAll, productInfo };
+module.exports = { productAll, getProductInfo };

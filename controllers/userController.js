@@ -47,34 +47,29 @@ const emailCheck = catchAsync(async (req, res) => {
 });
 
 const getUserInfo = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-  const result = await userService.getUserInfo(userId);
+  const result = await userService.getUserInfo(req.user.id);
   return res.status(200).json({ data: result });
 });
 
 const getUserAddress = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-  const result = await userService.getUserAddress(userId);
+  const result = await userService.getUserAddress(req.user.id);
   return res.status(200).json({ data: result });
 });
 
 const addressUpdate = catchAsync(async (req, res) => {
-  const userId = req.user.id;
   const { address } = req.body;
-  await userService.addressUpdate(userId, address);
+  await userService.addressUpdate(req.user.id, address);
   return res.status(201).json({ message: "UPDATE_USER_ADDRESS_SUCCESS" });
 });
 
 const getUserProfile = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-  const result = await userService.getUserProfile(userId);
+  const result = await userService.getUserProfile(req.user.id);
   return res.status(200).json({ data: result });
 });
 
 const passwordUpdate = catchAsync(async (req, res) => {
-  const userId = req.user.id;
   const { oldPassword, newPassword } = req.body;
-  await userService.passwordUpdate(oldPassword, newPassword, userId);
+  await userService.passwordUpdate(oldPassword, newPassword, req.user.id);
   return res.status(201).json({ message: "UPDATE_USER_PASSWORD_SUCCESS" });
 });
 

@@ -23,4 +23,17 @@ const getProductInfo = async (productId) => {
     [productId]
   );
 };
-module.exports = { getProducts, getProductInfo };
+
+const getProductTag = async (tagId) => {
+  return await appDataSource.query(
+    `SELECT
+    name,
+    price,
+    thumbnail_image,
+    part_tag_id
+    FROM products
+    where part_tag_id = ?`,
+    [tagId]
+  );
+};
+module.exports = { getProducts, getProductInfo, getProductTag };

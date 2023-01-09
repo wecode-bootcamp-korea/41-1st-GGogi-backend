@@ -68,10 +68,10 @@ const getUserInfo = async (userId) => {
       point,
       JSON_ARRAYAGG(
         JSON_OBJECT(
-      "주문상태", order_status.status,
-      "주문번호", orders.order_num,
-      "상품명", products.name,
-      "상품이미지", products.thumbnail_image)) as orderList
+      "orderStatus", order_status.status,
+      "orderNum", orders.order_num,
+      "productName", products.name,
+      "thumbnailImage", products.thumbnail_image)) as orderList
        FROM users 
        join orders on users.id = orders.user_id
        join order_status on orders.order_status_id = order_status.id

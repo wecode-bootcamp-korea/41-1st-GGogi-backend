@@ -6,10 +6,10 @@ const getCartList = async (userId) => {
     users.id,
     JSON_ARRAYAGG(
       JSON_OBJECT(
-        '상품명', products.name,
-        '가격', products.price,
-        '썸네일이미지', products.thumbnail_image,
-        '수량', carts.quantity)) AS cartList
+        'productName', products.name,
+        'price', products.price,
+        'thumbnailImage', products.thumbnail_image,
+        'quantity', carts.quantity)) AS cartList
         from carts
         join users on users.id = carts.user_id
         join products on products.id = carts.product_id
@@ -19,8 +19,26 @@ const getCartList = async (userId) => {
   return result;
 };
 
-const getCartItems = async (userId, productId, quantity) => {
-  ``;
+const addCartItems = async (userId, productId) => {
+  `INSERT INTO
+   carts
+   (user_id,
+    product_id,
+    quantity)
+   VALUES (?, ?, 1)
+   ON DUPLICATE KEY UPDATE user_id = ?, product_id =?, quantity = quantity +1;`,
+    [userId, productId, quantity];
 };
 
-module.exports = { getCartList };
+const updateItemQuantity = async (userId, productId, quantity) => {
+  `UPDATE carts SET quantity = ?
+  where user_id = ?, product_id = ?`,
+    [userId, productId, quantity];
+};
+
+const deleteItem = async (userId, productId) => {
+  `DELETE FROM carts
+  WHERE user_id =? AND product_id =?`,
+    [userId, productId];
+};
+module.exports = { getCartList, addCartItems, updateItemQuantity, deleteItem };

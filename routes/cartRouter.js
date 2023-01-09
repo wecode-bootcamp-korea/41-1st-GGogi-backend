@@ -4,6 +4,12 @@ const loginRequired = require("../utils/auth");
 
 const router = express.Router();
 
-router.get("/getList", loginRequired, cartController.getCartList);
-router.post("/getCartItem", loginRequired, cartController.getCartItems);
+router.get("", loginRequired, cartController.getCartList);
+router.post("/addCartItem", loginRequired, cartController.addCartItems);
+router.patch(
+  "/updateItemQuantity",
+  loginRequired,
+  cartController.updateItemQuantity
+);
+router.delete("/deleteItem", loginRequired, cartController.deleteItem);
 module.exports = { router };

@@ -12,8 +12,8 @@ const getCartList = async (userId) => {
         'thumbnailImage', products.thumbnail_image,
         'quantity', carts.quantity)) AS cartList
         from carts
-        join users on users.id = carts.user_id
-        join products on products.id = carts.product_id
+        right join users on users.id = carts.user_id
+        left join products on products.id = carts.product_id
         WHERE users.id = ?`,
     [userId]
   );

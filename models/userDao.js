@@ -60,10 +60,10 @@ const getUserInfo = async (userId) => {
       "productName", products.name,
       "thumbnailImage", products.thumbnail_image)) as orderList
        FROM users 
-       join orders on users.id = orders.user_id
-       join order_status on orders.order_status_id = order_status.id
-       join order_products on orders.id = order_products.orders_id
-       join products on products.id = order_products.product_id
+      left join orders on users.id = orders.user_id
+      left join order_status on orders.order_status_id = order_status.id
+      left join order_products on orders.id = order_products.orders_id
+      left join products on products.id = order_products.product_id
        WHERE users.id =?;`,
     [userId]
   );

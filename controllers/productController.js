@@ -2,18 +2,20 @@ const productService = require("../services/productService");
 const { catchAsync } = require("../utils/error");
 
 const getProducts = catchAsync(async (req, res) => {
-  const result = await productService.getProducts(req);
+  const result = await productService.getProducts();
   return res.status(200).json({ data: result });
 });
 
 const getProductInfo = catchAsync(async (req, res) => {
-  const result = await productService.getProductInfo(req.params.productId);
+  const productId = req.params.productId;
+  const result = await productService.getProductInfo(productId);
   return res.status(200).json({ data: result });
 });
 
-const getProductTag = catchAsync(async (req, res) => {
-  const result = await productService.getProductTag(req.params.tagId);
+const getProductsByTagId = catchAsync(async (req, res) => {
+  const tagId = req.params.tagId;
+  const result = await productService.getProductsByTagId(tagId);
   return res.status(200).json({ data: result });
 });
 
-module.exports = { getProducts, getProductInfo, getProductTag };
+module.exports = { getProducts, getProductInfo, getProductsByTagId };

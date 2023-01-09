@@ -1,6 +1,6 @@
 const appDataSource = require("./appDataSource");
 
-const getProducts = async (req) => {
+const getProducts = async () => {
   return await appDataSource.query(
     `SELECT
       name,
@@ -26,16 +26,19 @@ const getProductInfo = async (productId) => {
   );
 };
 
-const getProductTag = async (tagId) => {
+const getProductsByTagId = async (tagId) => {
   return await appDataSource.query(
     `SELECT
-    name,
-    price,
-    thumbnail_image,
-    part_tag_id
+    part_tag_id,
+    JSON_ARRAYAGG(
+      JSON_OBJECT(
+    "productName", name,
+    "price", price,
+    "thumbnail", thumbnail_image,)
+    ) as productInfo
     FROM products
     where part_tag_id = ?`,
     [tagId]
   );
 };
-module.exports = { getProducts, getProductInfo, getProductTag };
+module.exports = { getProducts, getProductInfo, getProductsByTagId };

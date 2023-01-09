@@ -14,7 +14,9 @@ const getProductInfo = async (productId) => {
   return await appDataSource.query(
     `SELECT
       name,
+      date,
       price,
+      description,
       thumbnail_image,
       product_images.image_url
       FROM products

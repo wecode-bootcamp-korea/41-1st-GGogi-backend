@@ -56,9 +56,9 @@ const getUserAddress = catchAsync(async (req, res) => {
   return res.status(200).json({ data: result });
 });
 
-const addressUpdate = catchAsync(async (req, res) => {
+const updateUserAddress = catchAsync(async (req, res) => {
   const { address } = req.body;
-  await userService.addressUpdate(req.user.id, address);
+  await userService.updateUserAddress(req.user.id, address);
   return res.status(201).json({ message: "UPDATE_USER_ADDRESS_SUCCESS" });
 });
 
@@ -67,9 +67,9 @@ const getUserProfile = catchAsync(async (req, res) => {
   return res.status(200).json({ data: result });
 });
 
-const passwordUpdate = catchAsync(async (req, res) => {
+const updateUserPassword = catchAsync(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  await userService.passwordUpdate(oldPassword, newPassword, req.user.id);
+  await userService.updateUserPassword(oldPassword, newPassword, req.user.id);
   return res.status(201).json({ message: "UPDATE_USER_PASSWORD_SUCCESS" });
 });
 
@@ -79,7 +79,7 @@ module.exports = {
   emailCheck,
   getUserInfo,
   getUserAddress,
-  addressUpdate,
+  updateUserAddress,
   getUserProfile,
-  passwordUpdate,
+  updateUserPassword,
 };

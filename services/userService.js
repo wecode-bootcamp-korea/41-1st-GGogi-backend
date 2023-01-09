@@ -51,16 +51,16 @@ const getUserAddress = async (userId) => {
   return userDao.getUserAddress(userId);
 };
 
-const addressUpdate = async (userId, address) => {
-  return userDao.addressUpdate(address, userId);
+const updateUserAddress = async (userId, address) => {
+  return userDao.updateUserAddress(address, userId);
 };
 
 const getUserProfile = async (userId) => {
   return userDao.getUserProfile(userId);
 };
 
-const passwordUpdate = async (oldPassword, newPassword, userId) => {
-  const user = await userDao.passwordUpdate(userId);
+const updateUserPassword = async (oldPassword, newPassword, userId) => {
+  const user = await userDao.updateUserPassword(userId);
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) {
     const err = new Error("PASSWORD_NOT_MATCH");
@@ -80,7 +80,7 @@ module.exports = {
   getUserById,
   getUserInfo,
   getUserAddress,
-  addressUpdate,
+  updateUserAddress,
   getUserProfile,
-  passwordUpdate,
+  updateUserPassword,
 };

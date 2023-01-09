@@ -29,20 +29,6 @@ const getUserByEmail = async (email) => {
   );
   return user;
 };
-const getUserByPassword = async (userId) => {
-  const [user] = await appDataSource.query(
-    `SELECT
-      id,
-      email,
-      password
-      FROM 
-      users 
-      WHERE users.id = ?;`,
-
-    [userId]
-  );
-  return user;
-};
 
 const checkMail = async (email) => {
   const [result] = await appDataSource.query(
@@ -92,7 +78,7 @@ const getUserAddress = async (userId) => {
   );
 };
 
-const addressUpdate = async (address, userId) => {
+const updateUserAddress = async (address, userId) => {
   return await appDataSource.query(
     `UPDATE users
       SET address =?
@@ -114,7 +100,7 @@ const getUserProfile = async (userId) => {
   );
 };
 
-const passwordUpdate = async (password, userId) => {
+const updateUserPassword = async (password, userId) => {
   return await appDataSource.query(
     `UPDATE users
       SET password =?
@@ -129,8 +115,7 @@ module.exports = {
   getUserById,
   getUserInfo,
   getUserAddress,
-  addressUpdate,
+  updateUserAddress,
   getUserProfile,
-  passwordUpdate,
-  getUserByPassword,
+  updateUserPassword,
 };

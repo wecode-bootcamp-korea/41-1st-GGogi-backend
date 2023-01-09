@@ -20,25 +20,32 @@ const getCartList = async (userId) => {
 };
 
 const addCartItems = async (userId, productId) => {
-  `INSERT INTO
+  await appDataSource.query(
+    `INSERT INTO
    carts
    (user_id,
     product_id,
     quantity)
    VALUES (?, ?, 1)
-   ON DUPLICATE KEY UPDATE user_id = ?, product_id =?, quantity = quantity +1;`,
-    [userId, productId, quantity];
+   ON DUPLICATE KEY UPDATE 
+   user_id = ?, product_id =?, quantity = quantity + 1;`,
+    [userId, productId, userId, productId]
+  );
 };
 
 const updateItemQuantity = async (userId, productId, quantity) => {
-  `UPDATE carts SET quantity = ?
+  await appDataSource.query(
+    `UPDATE carts SET quantity = ?
   where user_id = ?, product_id = ?`,
-    [userId, productId, quantity];
+    [userId, productId, quantity]
+  );
 };
 
 const deleteItem = async (userId, productId) => {
-  `DELETE FROM carts
+  await appDataSource.query(
+    `DELETE FROM carts
   WHERE user_id =? AND product_id =?`,
-    [userId, productId];
+    [userId, productId]
+  );
 };
 module.exports = { getCartList, addCartItems, updateItemQuantity, deleteItem };

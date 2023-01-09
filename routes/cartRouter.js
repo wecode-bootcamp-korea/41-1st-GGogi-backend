@@ -5,9 +5,9 @@ const loginRequired = require("../utils/auth");
 const router = express.Router();
 
 router.get("", loginRequired, cartController.getCartList);
-router.post("/addcartitem", loginRequired, cartController.addCartItems);
+router.post("/addCartItem", loginRequired, cartController.addCartItems);
 router.patch(
-  "/updateitemquantity",
+  "/updateItemQuantity",
   loginRequired,
   cartController.updateItemQuantity
 );

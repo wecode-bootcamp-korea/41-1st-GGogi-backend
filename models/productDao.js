@@ -1,7 +1,7 @@
 const appDataSource = require("./appDataSource");
 
 const getProducts = async () => {
-  const result = await appDataSource.query(
+  return appDataSource.query(
     `SELECT
     id,
       name,
@@ -9,39 +9,39 @@ const getProducts = async () => {
       thumbnail_image
       FROM products`
   );
-  return result;
 };
 
 const getProductInfo = async (productId) => {
   const [result] = await appDataSource.query(
     `SELECT
-      name,
-      date,
-      price,
-      description,
-      thumbnail_image,
-      product_images.image_url
-      FROM products
-      join product_images on products.id = product_images.product_id
-      where product_id = ?`,
+      p.name,
+      p.date,
+      p.price,
+      p.description,
+      p.thumbnail_image,
+      pi.image_url
+      FROM products p 
+      join product_images pi on p.id = pi.product_id
+      where p.id = ?`,
     [productId]
   );
   return result;
 };
 
 const getProductsByTagId = async (tagId) => {
-  return await appDataSource.query(
+  return appDataSource.query(
     `SELECT
-    part_tag_id,
+    p.part_tag_id,
     JSON_ARRAYAGG(
       JSON_OBJECT(
-    "productName", name,
-    "price", price,
-    "thumbnail", thumbnail_image,)
+    "productName", p.name,
+    "price", p.price,
+    "thumbnail", p.thumbnail_image,)
     ) as productInfo
-    FROM products
+    FROM products p
     where part_tag_id = ?`,
     [tagId]
   );
 };
+
 module.exports = { getProducts, getProductInfo, getProductsByTagId };

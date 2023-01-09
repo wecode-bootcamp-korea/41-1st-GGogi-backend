@@ -1,17 +1,19 @@
 const appDataSource = require("./appDataSource");
 
 const getProducts = async () => {
-  return await appDataSource.query(
+  const result = await appDataSource.query(
     `SELECT
+    id,
       name,
       price,
       thumbnail_image
       FROM products`
   );
+  return result;
 };
 
 const getProductInfo = async (productId) => {
-  return await appDataSource.query(
+  const result = await appDataSource.query(
     `SELECT
       name,
       date,
@@ -24,6 +26,7 @@ const getProductInfo = async (productId) => {
       where product_id = ?`,
     [productId]
   );
+  return result;
 };
 
 const getProductsByTagId = async (tagId) => {

@@ -3,13 +3,13 @@ const { catchAsync } = require("../utils/error");
 
 const getProducts = catchAsync(async (req, res) => {
   const result = await productService.getProducts();
-  return res.status(200).json({ data: result });
+  return res.status(200).json(result);
 });
 
 const getProductInfo = catchAsync(async (req, res) => {
   const productId = req.params.productId;
   const result = await productService.getProductInfo(productId);
-  return res.status(200).json({ data: result });
+  return res.status(200).json(result);
 });
 
 const getProductsByTagId = catchAsync(async (req, res) => {

@@ -10,8 +10,8 @@ const loginRequired = async (req, res, next) => {
     return res.status(error.statusCode).json({ message: error.message });
   }
 
-  const decode = await jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
-  const user = await userService.signIn(decode.id);
+  const decode = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+  const [user] = await userService.getUserById(decode.id);
 
   if (!user) {
     const error = new Error("USER_DOES_NOT_EXIST");

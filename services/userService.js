@@ -20,14 +20,12 @@ const signUp = async (email, name, password, address, phone, birthdate) => {
 
 const signIn = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
-  console.log(user);
-
-  if (user.length == 0) {
+  if (!user) {
     const err = new Error("USER_IS_NOT_VALID");
     err.statusCode = 409;
     throw err;
   }
-  const isMatch = await bcrypt.compare(password, user[0].password);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     const err = new Error("USER_IS_NOT_MATCH");
     err.statusCode = 409;
@@ -37,15 +35,52 @@ const signIn = async (email, password) => {
 };
 
 const mailCheck = async (email) => {
-  const emailCount = await userDao.checkMail(email);
-  if (emailCount == 0) {
-    return false;
-  } else {
-    return true;
-  }
+  const emailCheck = await userDao.checkMail(email);
+  return emailCheck ? true : false;
 };
+
+const getUserById = async (userId) => {
+  return userDao.getUserById(userId);
+};
+
+const getUserInfo = async (userId) => {
+  return userDao.getUserInfo(userId);
+};
+
+const getUserAddress = async (userId) => {
+  return userDao.getUserAddress(userId);
+};
+
+const updateUserAddress = async (userId, address) => {
+  return userDao.updateUserAddress(address, userId);
+};
+
+const getUserProfile = async (userId) => {
+  return userDao.getUserProfile(userId);
+};
+
+const updateUserPassword = async (oldPassword, newPassword, userId) => {
+  const user = await userDao.updateUserPassword(userId);
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    const err = new Error("PASSWORD_NOT_MATCH");
+    err.statusCode = 409;
+    throw err;
+  }
+  await pwValidation(newPassword);
+  const saltRounds = 10;
+  const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+  return await userDao.passwordUpdate(hashPassword, userId);
+};
+
 module.exports = {
   signUp,
   signIn,
   mailCheck,
+  getUserById,
+  getUserInfo,
+  getUserAddress,
+  updateUserAddress,
+  getUserProfile,
+  updateUserPassword,
 };

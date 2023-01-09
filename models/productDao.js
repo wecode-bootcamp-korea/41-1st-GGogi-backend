@@ -36,10 +36,10 @@ const getProductsByTagId = async (tagId) => {
       JSON_OBJECT(
     "productName", p.name,
     "price", p.price,
-    "thumbnail", p.thumbnail_image,)
+    "thumbnail", p.thumbnail_image)
     ) as productInfo
     FROM products p
-    where part_tag_id = ?`,
+    where p.part_tag_id = ?`,
     [tagId]
   );
 };

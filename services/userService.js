@@ -60,7 +60,7 @@ const getUserProfile = async (userId) => {
 };
 
 const updateUserPassword = async (oldPassword, newPassword, userId) => {
-  const user = await userDao.updateUserPassword(userId);
+  const user = await userDao.getUserByInfo(userId);
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) {
     const err = new Error("PASSWORD_NOT_MATCH");
@@ -70,7 +70,7 @@ const updateUserPassword = async (oldPassword, newPassword, userId) => {
   await pwValidation(newPassword);
   const saltRounds = 10;
   const hashPassword = await bcrypt.hash(newPassword, saltRounds);
-  return await userDao.passwordUpdate(hashPassword, userId);
+  return await userDao.updateUserPassword(hashPassword, userId);
 };
 
 module.exports = {

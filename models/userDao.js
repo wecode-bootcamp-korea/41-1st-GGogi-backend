@@ -54,6 +54,7 @@ const getUserInfo = async (userId) => {
       point,
       JSON_ARRAYAGG(
         JSON_OBJECT(
+          "productId", products.id,
       "orderStatus", order_status.status,
       "orderNum", orders.order_num,
       "productName", products.name,
@@ -71,6 +72,8 @@ const getUserInfo = async (userId) => {
 const getUserAddress = async (userId) => {
   return await appDataSource.query(
     `SELECT
+    name,
+    phone,
       address
        FROM users 
        WHERE users.id =?;`,
@@ -100,7 +103,21 @@ const getUserProfile = async (userId) => {
   );
 };
 
+const getUserByInfo = async (userId) => {
+  const [result] = await appDataSource.query(
+    `SELECT
+    id,
+  email,
+  password
+  FROM users
+  WHERE id =?`,
+    [userId]
+  );
+  return result;
+};
+
 const updateUserPassword = async (password, userId) => {
+  console.log(password);
   return await appDataSource.query(
     `UPDATE users
       SET password =?
@@ -118,4 +135,5 @@ module.exports = {
   updateUserAddress,
   getUserProfile,
   updateUserPassword,
+  getUserByInfo,
 };

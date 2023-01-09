@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("", loginRequired, cartController.getCartList);
 router.post("/addcartitem", loginRequired, cartController.addCartItems);
 router.patch(
-  "/updateItemQuantity",
+  "/updateitemquantity",
   loginRequired,
   cartController.updateItemQuantity
 );

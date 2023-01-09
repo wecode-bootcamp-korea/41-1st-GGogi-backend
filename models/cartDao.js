@@ -4,6 +4,7 @@ const getCartList = async (userId) => {
   const [result] = await appDataSource.query(
     `SELECT 
     users.id,
+    users.address,
     JSON_ARRAYAGG(
       JSON_OBJECT(
         'productName', products.name,
@@ -36,8 +37,8 @@ const addCartItems = async (userId, productId) => {
 const updateItemQuantity = async (userId, productId, quantity) => {
   await appDataSource.query(
     `UPDATE carts SET quantity = ?
-  where user_id = ?, product_id = ?`,
-    [userId, productId, quantity]
+  WHERE user_id = ? AND product_id = ?`,
+    [quantity, userId, productId]
   );
 };
 

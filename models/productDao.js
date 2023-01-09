@@ -13,7 +13,7 @@ const getProducts = async () => {
 };
 
 const getProductInfo = async (productId) => {
-  const result = await appDataSource.query(
+  const [result] = await appDataSource.query(
     `SELECT
       name,
       date,

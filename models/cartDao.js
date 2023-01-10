@@ -21,17 +21,17 @@ const getCartList = async (userId) => {
   return result;
 };
 
-const addCartItems = async (userId, productId) => {
+const addCartItems = async (userId, productId, quantity) => {
   await appDataSource.query(
     `INSERT INTO
    carts
    (user_id,
     product_id,
     quantity)
-   VALUES (?, ?, 1)
+   VALUES (?, ?, ?)
    ON DUPLICATE KEY UPDATE 
-   user_id = ?, product_id =?, quantity = quantity + 1;`,
-    [userId, productId, userId, productId]
+   user_id = ?, product_id =?, quantity = ?`,
+    [userId, productId, quantity, userId, productId, quantity]
   );
 };
 

@@ -23,8 +23,7 @@ const getProductInfo = async (productId) => {
       p.description,
       p.thumbnail_image,
       JSON_ARRAYAGG(
-        JSON_OBJECT(
-      "image_url", pi.image_url)) as image_url
+pi.image_url) as image_url
       FROM products p 
       left join product_images pi on p.id = pi.product_id
       where p.id = ?`,

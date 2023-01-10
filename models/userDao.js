@@ -103,7 +103,7 @@ const getUserProfile = async (userId) => {
   );
 };
 
-const getUserByInfo = async (userId) => {
+const getUserInfoById = async (userId) => {
   const [result] = await appDataSource.query(
     `SELECT
     id,
@@ -135,5 +135,5 @@ module.exports = {
   updateUserAddress,
   getUserProfile,
   updateUserPassword,
-  getUserByInfo,
+  getUserInfoById,
 };

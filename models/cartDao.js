@@ -13,16 +13,16 @@ const getCartList = async (userId) => {
         'thumbnailImage', p.thumbnail_image,
         'quantity', c.quantity)) AS cartList
         from carts c
-        right join users u on u.id = c.user_id
-        left join products p on p.id = c.product_id
+        join users u on u.id = c.user_id
+        join products p on p.id = c.product_id
         WHERE u.id = ?`,
     [userId]
   );
   return result;
 };
 
-const addCartItems = async (userId, productId, quantity) => {
-  await appDataSource.query(
+const createCart = async (userId, productId, quantity) => {
+  return appDataSource.query(
     `INSERT INTO
    carts
    (user_id,
@@ -35,16 +35,16 @@ const addCartItems = async (userId, productId, quantity) => {
   );
 };
 
-const updateItemQuantity = async (userId, productId, quantity) => {
-  await appDataSource.query(
+const updateCart = async (cartId, quantity) => {
+  return appDataSource.query(
     `UPDATE carts SET quantity = ?
-  WHERE user_id = ? AND product_id = ?`,
-    [quantity, userId, productId]
+  WHERE id = ?`,
+    [cartId, quantity]
   );
 };
 
 const deleteCart = async (cartId) => {
-  await appDataSource.query(
+  return appDataSource.query(
     `DELETE FROM carts c 
     WHERE c.id IN (?)  `,
     [cartId]
@@ -52,7 +52,7 @@ const deleteCart = async (cartId) => {
 };
 module.exports = {
   getCartList,
-  addCartItems,
-  updateItemQuantity,
+  createCart,
+  updateCart,
   deleteCart,
 };

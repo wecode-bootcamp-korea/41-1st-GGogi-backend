@@ -6,19 +6,16 @@ const getCartList = catchAsync(async (req, res) => {
   return res.status(200).json(result);
 });
 
-const addCartItems = catchAsync(async (req, res) => {
+const createCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const productId = req.body.productId;
-  const quantity = req.body.quantity;
-  await cartService.addCartItems(userId, productId, quantity);
+  const { productId, quantity } = req.body;
+  await cartService.createCart(userId, productId, quantity);
   return res.status(201).json({ message: "ADD_ITEMS_SUCCESS" });
 });
 
-const updateItemQuantity = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-  const productId = req.body.productId;
-  const quantity = req.body.quantity;
-  await cartService.updateItemQuantity(userId, productId, quantity);
+const updateCart = catchAsync(async (req, res) => {
+  const { cartId, quantity } = req.body;
+  await cartService.updateCart(cartId, quantity);
   return res.status(201).json({ message: "UPDATE_ITEM_QUANTITY_SUCCESS" });
 });
 
@@ -30,7 +27,7 @@ const deleteCart = catchAsync(async (req, res) => {
 
 module.exports = {
   getCartList,
-  addCartItems,
-  updateItemQuantity,
+  createCart,
+  updateCart,
   deleteCart,
 };

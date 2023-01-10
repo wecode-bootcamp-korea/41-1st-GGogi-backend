@@ -4,12 +4,12 @@ const getCartList = async (userId) => {
   return cartDao.getCartList(userId);
 };
 
-const addCartItems = async (userId, productId, quantity) => {
-  return cartDao.addCartItems(userId, productId, quantity);
+const createCart = async (userId, productId, quantity) => {
+  return cartDao.createCart(userId, productId, quantity);
 };
 
-const updateItemQuantity = async (userId, productId, quantity) => {
-  return cartDao.updateItemQuantity(userId, productId, quantity);
+const updateCart = async (cartId, quantity) => {
+  return cartDao.updateCart(cartId, quantity);
 };
 
 const deleteCart = async (cartId) => {
@@ -18,7 +18,7 @@ const deleteCart = async (cartId) => {
 
 module.exports = {
   getCartList,
-  addCartItems,
-  updateItemQuantity,
+  createCart,
+  updateCart,
   deleteCart,
 };

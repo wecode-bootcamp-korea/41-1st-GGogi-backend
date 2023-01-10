@@ -3,18 +3,19 @@ const appDataSource = require("./appDataSource");
 const getCartList = async (userId) => {
   const [result] = await appDataSource.query(
     `SELECT 
-    users.id,
-    users.address,
+    u.id as userId,
+    u.address,
     JSON_ARRAYAGG(
       JSON_OBJECT(
-        'productName', products.name,
-        'price', products.price,
-        'thumbnailImage', products.thumbnail_image,
-        'quantity', carts.quantity)) AS cartList
-        from carts
-        right join users on users.id = carts.user_id
-        left join products on products.id = carts.product_id
-        WHERE users.id = ?`,
+        'cartId', c.id,
+        'productName', p.name,
+        'price', p.price,
+        'thumbnailImage', p.thumbnail_image,
+        'quantity', c.quantity)) AS cartList
+        from carts c
+        right join users u on u.id = c.user_id
+        left join products p on p.id = c.product_id
+        WHERE u.id = ?`,
     [userId]
   );
   return result;
@@ -42,25 +43,17 @@ const updateItemQuantity = async (userId, productId, quantity) => {
   );
 };
 
-const deleteItem = async (userId, productId) => {
+const deleteCart = async (userId, cartId) => {
   await appDataSource.query(
-    `DELETE FROM carts
-  WHERE user_id =? AND product_id =?`,
-    [userId, productId]
-  );
-};
-
-const deleteCartAll = async (userId) => {
-  await appDataSource.query(
-    `DELETE FROM carts
-  WHERE user_id =?`,
-    [userId]
+    `DELETE FROM carts c
+  WHERE c.user_id = ? 
+  AND WHERE c.id IN (?)  `,
+    [userId, cartId]
   );
 };
 module.exports = {
   getCartList,
   addCartItems,
   updateItemQuantity,
-  deleteItem,
-  deleteCartAll,
+  deleteCart,
 };

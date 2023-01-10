@@ -12,8 +12,8 @@ const updateItemQuantity = async (userId, productId, quantity) => {
   return cartDao.updateItemQuantity(userId, productId, quantity);
 };
 
-const deleteCart = async (userId, cartId) => {
-  return cartDao.deleteCart(userId, cartId);
+const deleteCart = async (cartId) => {
+  return cartDao.deleteCart(cartId);
 };
 
 module.exports = {

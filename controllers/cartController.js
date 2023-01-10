@@ -22,9 +22,8 @@ const updateItemQuantity = catchAsync(async (req, res) => {
 });
 
 const deleteCart = catchAsync(async (req, res) => {
-  const userId = req.user.id;
   const { cartId } = req.query;
-  await cartService.deleteCart(userId, cartId);
+  await cartService.deleteCart(cartId);
   return res.status(200).json({ message: "DELETE_ITEM_SUCCESS" });
 });
 

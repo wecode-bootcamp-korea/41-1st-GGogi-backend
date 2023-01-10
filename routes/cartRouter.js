@@ -12,5 +12,6 @@ router.patch(
   cartController.updateItemQuantity
 );
 router.delete("/deleteItem", loginRequired, cartController.deleteItem);
+router.delete("/deleteAll", loginRequired, cartController.deleteCartAll);
 
 module.exports = { router };

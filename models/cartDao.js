@@ -49,4 +49,18 @@ const deleteItem = async (userId, productId) => {
     [userId, productId]
   );
 };
-module.exports = { getCartList, addCartItems, updateItemQuantity, deleteItem };
+
+const deleteCartAll = async (userId) => {
+  await appDataSource.query(
+    `DELETE FROM carts
+  WHERE user_id =?`,
+    [userId]
+  );
+};
+module.exports = {
+  getCartList,
+  addCartItems,
+  updateItemQuantity,
+  deleteItem,
+  deleteCartAll,
+};

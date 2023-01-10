@@ -16,4 +16,14 @@ const deleteItem = async (userId, productId) => {
   return cartDao.deleteItem(userId, productId);
 };
 
-module.exports = { getCartList, addCartItems, updateItemQuantity, deleteItem };
+const deleteCartAll = async (userId) => {
+  return cartDao.deleteCartAll(userId);
+};
+
+module.exports = {
+  getCartList,
+  addCartItems,
+  updateItemQuantity,
+  deleteItem,
+  deleteCartAll,
+};

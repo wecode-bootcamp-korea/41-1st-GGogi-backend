@@ -4,7 +4,7 @@ const getProducts = async ({
   category,
   sort = "old",
   offset = 0,
-  limit = 5,
+  limit = 4,
 }) => {
   return productDao.getProducts(category, sort, offset, limit);
 };

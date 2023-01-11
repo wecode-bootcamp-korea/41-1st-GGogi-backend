@@ -1,8 +1,8 @@
 const orderDao = require("../models/orderDao");
 const userDao = require("../models/userDao");
 
-const getOrderUser = async (userId) => {
-  return orderDao.getOrderUser(userId);
+const getOrderUser = async (userId, cartId, productId, quantity) => {
+  return orderDao.getOrderUser(userId, cartId, productId, quantity);
 };
 
 const postOrder = async (userId, totalPrice, cartInfos) => {

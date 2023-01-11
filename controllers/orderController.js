@@ -3,7 +3,17 @@ const { catchAsync } = require("../utils/error");
 
 const getOrderUser = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const result = await orderService.getOrderUser(userId);
+  const { cartId, productId, quantity } = req.body;
+  console.log(
+    cartId,
+    "--------------------------------------------------------"
+  );
+  const result = await orderService.getOrderUser(
+    userId,
+    cartId,
+    productId,
+    quantity
+  );
   return res.status(200).json(result);
 });
 

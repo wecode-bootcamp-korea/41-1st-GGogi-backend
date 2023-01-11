@@ -1,20 +1,20 @@
 const appDataSource = require("./appDataSource");
 
 const getOrderUser = async (userId) => {
-  return appDataSource.query(
+  const [result] = await appDataSource.query(
     `SELECT 
     u.name userName,
+    u.phone userPhone,
+    u.email userEmail,
+    u.address userAddress,
+    u.point userPoint,
     JSON_ARRAYAGG(
       JSON_OBJECT(
     "cartId", c.id,
     "productId", c.product_id,
     "productName", p.name, 
     "quantity", c.quantity,
-    "price", p.price)) as cartProducts,
-    u.phone userPhone,
-    u.email userEmail,
-    u.address userAddress,
-    u.point userPoint
+    "price", p.price)) as cartProducts
     FROM users u
     JOIN carts c ON u.id = c.user_id
     JOIN products p ON c.product_id = p.id
@@ -22,6 +22,7 @@ const getOrderUser = async (userId) => {
     `,
     [userId]
   );
+  return result;
 };
 
 const postOrder = async (userId, totalPrice, cartInfos) => {

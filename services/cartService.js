@@ -8,8 +8,8 @@ const createCart = async (userId, productId, quantity) => {
   return cartDao.createCart(userId, productId, quantity);
 };
 
-const updateCart = async (cartId, quantity) => {
-  return cartDao.updateCart(cartId, quantity);
+const updateCart = async (cartId, productId, quantity) => {
+  return cartDao.updateCart(cartId, productId, quantity);
 };
 
 const deleteCart = async (cartId) => {

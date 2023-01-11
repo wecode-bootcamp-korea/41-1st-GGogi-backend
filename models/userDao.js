@@ -54,15 +54,16 @@ const getUserInfo = async (userId) => {
       point,
       JSON_ARRAYAGG(
         JSON_OBJECT(
+          "productId", products.id,
       "orderStatus", order_status.status,
       "orderNum", orders.order_num,
       "productName", products.name,
       "thumbnailImage", products.thumbnail_image)) as orderList
        FROM users 
-       left join orders on users.id = orders.user_id
-       left join order_status on orders.order_status_id = order_status.id
-       left join order_products on orders.id = order_products.orders_id
-       left join products on products.id = order_products.product_id
+      left join orders on users.id = orders.user_id
+      left join order_status on orders.order_status_id = order_status.id
+      left join order_products on orders.id = order_products.orders_id
+      left join products on products.id = order_products.product_id
        WHERE users.id =?;`,
     [userId]
   );
@@ -95,11 +96,26 @@ const getUserProfile = async (userId) => {
       email,
       name,
       phone,
-      birthdate
+
+      birthdate,
+      point
        FROM users 
        WHERE users.id =?;`,
     [userId]
   );
+};
+
+const getUserInfoById = async (userId) => {
+  const [result] = await appDataSource.query(
+    `SELECT
+    id,
+  email,
+  password
+  FROM users
+  WHERE id =?`,
+    [userId]
+  );
+  return result;
 };
 
 const updateUserPassword = async (password, userId) => {
@@ -120,4 +136,6 @@ module.exports = {
   updateUserAddress,
   getUserProfile,
   updateUserPassword,
+  getUserInfoById,
+
 };

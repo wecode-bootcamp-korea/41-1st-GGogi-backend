@@ -9,9 +9,8 @@ const getOrderUser = catchAsync(async (req, res) => {
 
 const postOrder = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const cartId = req.query;
-  const { totalPrice, productId, quantity } = req.body;
-  orderService.postOrder(userId, cartId, totalPrice, productId, quantity);
+  const { totalPrice, cartInfos } = req.body;
+  orderService.postOrder(userId, totalPrice, cartInfos);
   return res.status(201).json({ message: "ORDER_SUCCESS" });
 });
 

@@ -24,7 +24,7 @@ const getOrderUser = async (userId) => {
   );
 };
 
-const postOrder = async (userId, cartId, totalPrice, productId, quantity) => {
+const postOrder = async (userId, totalPrice, cartInfos) => {
   //포인트빼기
   await appDataSource.query(
     `UPDATE users u
@@ -34,26 +34,34 @@ const postOrder = async (userId, cartId, totalPrice, productId, quantity) => {
   );
 
   // 오더스에 값 넣기
-  const ordersResult = await appDataSource.query(
+  const getOrdersId = await appDataSource.query(
     `INSERT INTO 
     orders ( 
       user_id, 
+      order_num,
       order_status_id)
-      VALUES (? , 1)`,
+      VALUES (? ,1,1)`,
     [userId]
   );
+
+  const orderId = getOrdersId.insertId;
   // 오더스 프로덕트에 값넣기
-  await appDataSource.query(
-    `INSERT INTO 
+  const query = `INSERT INTO 
     order_products (
       orders_id, 
       product_id, 
       quantity,
-      total_price, 
       order_status_id)
-      VALUES (?, ?, ?, ?, 1)`,
-    [ordersResult.orders_id, productId, quantity, totalPrice]
-  );
+      VALUES ?;`;
+
+  let values = [];
+  let cartIds = [];
+
+  for (let i = 0; i < cartInfos.length; i++) {
+    values.push([orderId, cartInfos[i].product_id, cartInfos[i].quantity, 1]);
+    cartIds.push([cartInfos[i].cart_id]);
+  }
+  await appDataSource.query(query, [values]);
   // 장바구니 지우기
   await appDataSource.query(
     `
@@ -61,7 +69,7 @@ const postOrder = async (userId, cartId, totalPrice, productId, quantity) => {
   FROM
    carts c
     WHERE c.id IN (?)`,
-    [cartId]
+    [cartIds]
   );
 };
 

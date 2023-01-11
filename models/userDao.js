@@ -96,6 +96,7 @@ const getUserProfile = async (userId) => {
       email,
       name,
       phone,
+
       birthdate,
       point
        FROM users 
@@ -118,7 +119,6 @@ const getUserInfoById = async (userId) => {
 };
 
 const updateUserPassword = async (password, userId) => {
-  console.log(password);
   return await appDataSource.query(
     `UPDATE users
       SET password =?
@@ -137,4 +137,5 @@ module.exports = {
   getUserProfile,
   updateUserPassword,
   getUserInfoById,
+
 };

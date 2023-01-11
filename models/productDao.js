@@ -1,17 +1,32 @@
 const appDataSource = require("./appDataSource");
 
-const getProducts = async () => {
-  return appDataSource.query(
-    `SELECT
-    id,
-      name,
-      price,
-      thumbnail_image,
-      part_tag_id,
-      weight_id,
-      category_id
-      FROM products`
+const getProducts = async (categoryId, sort, offset, limit) => {
+  let whereClause = categoryId ? `WHERE category_id = ${categoryId}` : ``;
+
+  const sortMethod = Object.freeze({
+    cheap: "p.price ASC",
+    expensive: "p.price DESC",
+    new: "p.create_at DESC",
+    old: "p.create_at ASC",
+    nameASC: "p.name ASC",
+    nameDESC: "p.name DESC",
+  });
+
+  const productList = await appDataSource.query(
+    `SELECT SQL_CALC_FOUND_ROWS
+    p.id,
+      p.name,
+      p.price,
+      p.thumbnail_image,
+      p.part_tag_id,
+      p.weight_id,
+      p.category_id
+      FROM products p
+      ${whereClause}
+      ORDER BY ${sortMethod[sort]}
+      LIMIT ${limit} OFFSET ${offset}`
   );
+  return productList;
 };
 
 const getProductInfo = async (productId) => {

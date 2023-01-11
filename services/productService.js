@@ -1,7 +1,12 @@
 const productDao = require("../models/productDao");
 
-const getProducts = async () => {
-  return productDao.getProducts();
+const getProducts = async ({
+  category,
+  sort = "old",
+  offset = 0,
+  limit = 5,
+}) => {
+  return productDao.getProducts(category, sort, offset, limit);
 };
 
 const getProductInfo = async (productId) => {

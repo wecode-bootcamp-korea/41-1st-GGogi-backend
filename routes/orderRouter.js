@@ -4,6 +4,6 @@ const loginRequired = require("../utils/auth");
 
 const router = express.Router();
 
-router.get("", loginRequired, orderController.getOrderUser);
-router.post("", loginRequired, orderController.createOrder);
+// router.get("", loginRequired, orderController.getOrderUser);
+// router.post("", loginRequired, orderController.postOrder);
 module.exports = { router };

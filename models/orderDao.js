@@ -7,6 +7,7 @@ const getOrderUser = async (userId) => {
     JSON_ARRAYAGG(
       JSON_OBJECT(
     "cartId", c.id,
+    "productId", c.product_id,
     "productName", p.name, 
     "quantity", c.quantity,
     "price", p.price)) as cartProducts,
@@ -27,9 +28,9 @@ const postOrder = async (userId, cartId, totalPrice, productId, quantity) => {
   //포인트빼기
   await appDataSource.query(
     `UPDATE users u
-  set u.point = u.point - totalPrice
+  set u.point = u.point - ${totalPrice}
   where u.id = ?`,
-    [userId, totalPrice]
+    [userId]
   );
 
   // 오더스에 값 넣기
@@ -58,8 +59,8 @@ const postOrder = async (userId, cartId, totalPrice, productId, quantity) => {
     `
   DELETE 
   FROM
-   carts
-    WHERE cart_id = ?`,
+   carts c
+    WHERE c.id IN (?)`,
     [cartId]
   );
 };

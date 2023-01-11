@@ -96,7 +96,8 @@ const getUserProfile = async (userId) => {
       email,
       name,
       phone,
-      birthdate
+      birthdate,
+      point
        FROM users 
        WHERE users.id =?;`,
     [userId]

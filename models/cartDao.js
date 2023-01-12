@@ -8,6 +8,7 @@ const getCartList = async (userId) => {
     JSON_ARRAYAGG(
       JSON_OBJECT(
         'cartId', c.id,
+        'productId', c.product_id,
         'productName', p.name,
         'price', p.price,
         'thumbnailImage', p.thumbnail_image,
@@ -35,11 +36,11 @@ const createCart = async (userId, productId, quantity) => {
   );
 };
 
-const updateCart = async (cartId, quantity) => {
+const updateCart = async (cartId, productId, quantity) => {
   return appDataSource.query(
-    `UPDATE carts SET quantity = ?
+    `UPDATE carts SET product_id = ?, quantity = ?
   WHERE id = ?`,
-    [cartId, quantity]
+    [productId, quantity, cartId]
   );
 };
 

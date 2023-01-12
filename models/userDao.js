@@ -41,7 +41,7 @@ const checkMail = async (email) => {
 
 const getUserById = async (userId) => {
   return await appDataSource.query(
-    `SELECT id FROM users WHERE id =?;`,
+    `SELECT id, point FROM users WHERE id =?;`,
 
     [userId]
   );
@@ -137,5 +137,4 @@ module.exports = {
   getUserProfile,
   updateUserPassword,
   getUserInfoById,
-
 };

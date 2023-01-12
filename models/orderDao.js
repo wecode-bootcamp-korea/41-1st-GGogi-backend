@@ -1,4 +1,5 @@
 const appDataSource = require("./appDataSource");
+const queryRunner = appDataSource.createQueryRunner();
 
 const getOrderUser = async (userId) => {
   const [result] = await appDataSource.query(
@@ -27,30 +28,29 @@ const getOrderUser = async (userId) => {
 };
 
 const postOrder = async (userId, totalPrice, cartInfos) => {
-  const queryRunner = appDataSource.createQueryRunner();
+  try {
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-  await queryRunner.connect();
-  await queryRunner.startTransaction();
-
-  await queryRunner.query(
-    `UPDATE users u
+    await queryRunner.query(
+      `UPDATE users u
   set u.point = u.point - ${totalPrice}
   where u.id = ?`,
-    [userId]
-  );
+      [userId]
+    );
 
-  const getOrdersId = await queryRunner.query(
-    `INSERT INTO 
+    const getOrdersId = await queryRunner.query(
+      `INSERT INTO 
     orders ( 
       user_id, 
       order_num,
       order_status_id)
-      VALUES (? ,1,1)`,
-    [userId]
-  );
+      VALUES (? ,uuid(),1)`,
+      [userId]
+    );
 
-  const orderId = getOrdersId.insertId;
-  const query = `INSERT INTO 
+    const orderId = getOrdersId.insertId;
+    const query = `INSERT INTO 
     order_products (
       orders_id, 
       product_id, 
@@ -58,25 +58,30 @@ const postOrder = async (userId, totalPrice, cartInfos) => {
       order_status_id)
       VALUES ?;`;
 
-  let values = [];
-  let cartIds = [];
+    let values = [];
+    let cartIds = [];
 
-  for (let i = 0; i < cartInfos.length; i++) {
-    values.push([orderId, cartInfos[i].product_id, cartInfos[i].quantity, 1]);
-    cartIds.push([cartInfos[i].cart_id]);
-  }
-  await queryRunner.query(query, [values]);
-  await queryRunner.query(
-    `
+    for (let i = 0; i < cartInfos.length; i++) {
+      values.push([orderId, cartInfos[i].product_id, cartInfos[i].quantity, 1]);
+      cartIds.push([cartInfos[i].cart_id]);
+    }
+    await queryRunner.query(query, [values]);
+    await queryRunner.query(
+      `
   DELETE 
   FROM
    carts c
     WHERE c.id IN (?)`,
-    [cartIds]
-  );
+      [cartIds]
+    );
 
-  await queryRunner.commitTransaction();
-  await queryRunner.release();
+    await queryRunner.commitTransaction();
+  } catch {
+    await queryRunner.rollbackTransaction();
+    throw error;
+  } finally {
+    await queryRunner.release();
+  }
 };
 
 module.exports = { getOrderUser, postOrder };

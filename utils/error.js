@@ -9,9 +9,6 @@ const catchAsync = (func) => {
 const globalErrorHandler = (err, req, res, next) => {
   console.error(err.stack);
 
-  queryRunner.rollbackTransaction();
-  queryRunner.release();
-
   err.statusCode = err.statusCode || 500;
 
   res.status(err.statusCode).json({ message: err.message });

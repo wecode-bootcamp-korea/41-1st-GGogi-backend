@@ -38,9 +38,9 @@ const createCart = async (userId, productId, quantity) => {
 
 const updateCart = async (cartId, productId, quantity) => {
   return appDataSource.query(
-    `UPDATE carts SET product_id = ${productId}, quantity = ${quantity}
+    `UPDATE carts SET product_id = ?, quantity = ?
   WHERE id = ?`,
-    [cartId]
+    [productId, quantity, cartId]
   );
 };
 

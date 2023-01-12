@@ -11,6 +11,7 @@ const getOrderUser = async (userId) => {
     JSON_ARRAYAGG(
       JSON_OBJECT(
     "cartId", c.id,
+    "thumbnailImage", p.thumbnail_image,
     "productId", c.product_id,
     "productName", p.name, 
     "quantity", c.quantity,
@@ -26,14 +27,19 @@ const getOrderUser = async (userId) => {
 };
 
 const postOrder = async (userId, totalPrice, cartInfos) => {
-  await appDataSource.query(
+  const queryRunner = appDataSource.createQueryRunner();
+
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  await queryRunner.query(
     `UPDATE users u
   set u.point = u.point - ${totalPrice}
   where u.id = ?`,
     [userId]
   );
 
-  const getOrdersId = await appDataSource.query(
+  const getOrdersId = await queryRunner.query(
     `INSERT INTO 
     orders ( 
       user_id, 
@@ -59,8 +65,8 @@ const postOrder = async (userId, totalPrice, cartInfos) => {
     values.push([orderId, cartInfos[i].product_id, cartInfos[i].quantity, 1]);
     cartIds.push([cartInfos[i].cart_id]);
   }
-  await appDataSource.query(query, [values]);
-  await appDataSource.query(
+  await queryRunner.query(query, [values]);
+  await queryRunner.query(
     `
   DELETE 
   FROM
@@ -68,6 +74,9 @@ const postOrder = async (userId, totalPrice, cartInfos) => {
     WHERE c.id IN (?)`,
     [cartIds]
   );
+
+  await queryRunner.commitTransaction();
+  await queryRunner.release();
 };
 
 module.exports = { getOrderUser, postOrder };
